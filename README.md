@@ -51,7 +51,7 @@ plugin could look like this:
     vim.keymap.set('n', '<leader>Bf', function() file_history.files() end, { silent = true, desc = 'local history files in repo' })
     vim.keymap.set('n', '<leader>Bq', function() file_history.query() end, { silent = true, desc = 'local history query' })
   end
-})
+}
 ```
 
 
