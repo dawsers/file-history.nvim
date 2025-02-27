@@ -8,6 +8,11 @@ it is kept in an internal git repository. You can query this repository and
 go back to any file at any point in time using the provided pickers. The
 pickers use Neovim's [snacks.nvim](https://github.com/folke/snacks.nvim).
 
+The goal of the extension is to have a history of the changes you make to
+your files, with less granularity than `undo`, which is sometimes too much, but
+more than what you would normally *commit* to a versioning repository. And it
+also supports files that are not in any project or repo.
+
 
 ## Requirements
 
@@ -44,6 +49,22 @@ plugin could look like this:
       backup_dir = "~/.file-history-git",
       -- command line to execute git
       git_cmd = "git"
+      -- If you want to override the automatic query for hostname, change this
+      -- option. By default (nil), the plugin gets the host name for the computer
+      -- it is running on.
+      --
+      -- You should only modify this value if you understand the following:
+      -- This plugin writes a backup copy of every file you edit in neovim, not
+      -- just your coding projects. When copying the file-history repository from
+      -- one computer to another, having the hostname added to each file in the
+      -- repo prevents you from messing the history of files that should be unique
+      -- to that computer (host). For example, configuration and system files
+      -- will probably be different in part or fully. So, even though it may
+      -- make sense for coding projects to be able to move the database and
+      -- disregard the host name, in many cases you will be editing other types
+      -- of files, where keeping the correct host name will help you recover
+      -- from mistakes.
+      hostname = nil
     })
     -- There are no default key maps, this is an example
     vim.keymap.set('n', '<leader>Bb',function() file_history.backup() end, { silent = true, desc = 'named backup for file' })
