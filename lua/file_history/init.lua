@@ -245,13 +245,29 @@ local function prepare_picker_data()
   return data
 end
 
+-- Register the pickers as snacks sources, so they can also be opened with
+-- Snacks.picker.file_history() / Snacks.picker.file_history_files() and are
+-- listed in Snacks.picker.pickers()
+local function register_sources()
+  snacks_picker.sources.file_history = {
+    config = function(opts)
+      -- The history diffs against the buffer the picker is opened from, so
+      -- the picker is built when it opens
+      local source = file_history_picker(prepare_picker_data())
+      -- snacks moves confirm into actions before running config hooks
+      source.actions.confirm = source.confirm
+      return vim.tbl_deep_extend("force", opts, source)
+    end,
+  }
+  snacks_picker.sources.file_history_files = file_history_files_picker()
+end
+
 function M.history()
-  local data = prepare_picker_data()
-  snacks_picker.pick(file_history_picker(data))
+  snacks_picker.pick("file_history")
 end
 
 function M.files()
-  snacks_picker.pick(file_history_files_picker())
+  snacks_picker.pick("file_history_files")
 end
 
 function M.backup()
@@ -327,6 +343,7 @@ end
 function M.setup(opts)
   M.opts = vim.tbl_deep_extend("force", defaults, opts or {})
   fh.setup(opts)
+  register_sources()
 
   vim.api.nvim_create_user_command("FileHistory", commands, { nargs = 1 })
 end

@@ -98,6 +98,11 @@ plugin could look like this:
 
 There are no default mappings for any of the commands.
 
+The `history` and `files` pickers are also registered as snacks picker
+sources, so they can be opened with `Snacks.picker.file_history()` and
+`Snacks.picker.file_history_files()`, and are listed in
+`Snacks.picker.pickers()`.
+
 The plugin supports multiple selections.
 
 ### Backup
